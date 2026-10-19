@@ -1,0 +1,172 @@
+/* Rebobine Vídeo Locadora - visual retrô de balcão de locadora.
+   Paleta: vinho #800020, bege #F3E6D5, creme #FFF9F2, rosa #D45060 */
+:root {
+  --vinho: #800020;
+  --bege: #f3e6d5;
+  --creme: #fff9f2;
+  --rosa: #d45060;
+  --tinta: #2b0a12;
+  --display: "Bungee", "Impact", "Arial Black", sans-serif;
+  --texto: "Courier Prime", "Courier New", monospace;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background-color: var(--bege);
+  background-image: radial-gradient(rgba(128, 0, 32, 0.1) 1px, transparent 1px);
+  background-size: 14px 14px;
+  color: var(--tinta);
+  font: 400 1rem/1.5 var(--texto);
+}
+.pular { position: absolute; left: -9999px; }
+.pular:focus { left: 1rem; top: 1rem; z-index: 99; background: var(--creme); padding: .5rem 1rem; }
+.so-leitor { position: absolute; left: -9999px; }
+
+/* ---------- toldo listrado e letreiro ---------- */
+.toldo { height: 30px; background: repeating-linear-gradient(90deg, var(--rosa) 0 44px, var(--creme) 44px 88px); position: relative; z-index: 2; }
+.toldo::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 22px;
+  background: repeating-linear-gradient(90deg, var(--rosa) 0 44px, var(--creme) 44px 88px);
+  -webkit-mask: radial-gradient(circle at 50% 0, #000 21.5px, transparent 22px) 0 0 / 44px 22px repeat-x;
+  mask: radial-gradient(circle at 50% 0, #000 21.5px, transparent 22px) 0 0 / 44px 22px repeat-x;
+}
+.letreiro {
+  position: relative; background: var(--vinho); color: var(--creme);
+  padding: 2.4rem 1.25rem 1.6rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; justify-content: space-between;
+}
+.letreiro::after { /* lâmpadas do letreiro */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 14px;
+  background: radial-gradient(circle at 50% 50%, var(--creme) 3.5px, transparent 4.5px) 0 0 / 22px 14px repeat-x;
+  animation: piscar 1.6s steps(1) infinite;
+}
+@keyframes piscar { 50% { background-position: 11px 0; } }
+.marca h1 { margin: 0; font: 400 clamp(2.2rem, 7vw, 3.6rem)/1 var(--display); letter-spacing: .02em; text-shadow: 3px 3px 0 var(--rosa); }
+.marca p { margin: .35rem 0 0; font-weight: 700; letter-spacing: .35em; }
+.placar { display: flex; flex-wrap: wrap; gap: .75rem; }
+.ticket {
+  background: var(--creme); color: var(--vinho); border: 2px dashed var(--vinho); outline: 3px solid var(--creme);
+  padding: .4rem .9rem; min-width: 7.5rem; text-align: center; line-height: 1.15;
+}
+.ticket strong { display: block; font: 400 1.9rem/1.1 var(--display); }
+.ticket span { font-size: .8rem; font-weight: 700; }
+.ticket-alerta { background: var(--rosa); color: var(--tinta); border-color: var(--tinta); }
+.abas { display: flex; flex-wrap: wrap; gap: .5rem; width: 100%; margin-top: .5rem; padding-bottom: .6rem; }
+.abas button {
+  font: 700 1rem var(--texto); color: var(--vinho); background: var(--bege); border: 3px solid var(--creme);
+  padding: .45rem 1.1rem; cursor: pointer; border-radius: 4px 4px 0 0;
+}
+.abas button:hover { background: var(--creme); }
+.abas button[aria-current="page"] { background: var(--rosa); color: var(--tinta); box-shadow: 0 4px 0 var(--tinta); }
+.abas .sair { margin-left: auto; background: transparent; color: var(--creme); }
+.abas .sair:hover { background: var(--rosa); color: var(--tinta); }
+
+/* ---------- layout ---------- */
+main { max-width: 72rem; margin: 0 auto; padding: 1.5rem 1rem 2rem; }
+.cabecalho-secao { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+h2 { margin: 0; font: 400 1.6rem/1.2 var(--display); color: var(--vinho); }
+h3 { margin: 0; }
+.regra { background: var(--creme); border-left: 8px solid var(--rosa); padding: .6rem 1rem; margin: 0 0 1rem; }
+.contagem { margin: .5rem 0 1rem; font-style: italic; }
+.vazio { text-align: center; padding: 2rem; font-weight: 700; }
+.rodape { text-align: center; padding: 1.5rem 1rem 2.5rem; color: var(--vinho); font-weight: 700; border-top: 4px double var(--vinho); max-width: 72rem; margin: 0 auto; }
+
+#aviso:not(:empty) {
+  max-width: 72rem; margin: 1rem auto 0; padding: .7rem 1rem; background: var(--creme);
+  border: 3px solid var(--vinho); border-left-width: 12px; font-weight: 700; box-shadow: 5px 5px 0 var(--vinho);
+}
+#aviso.erro { border-color: var(--tinta); border-left-color: var(--rosa); }
+
+/* ---------- formulários e botões ---------- */
+.filtros { display: flex; flex-wrap: wrap; gap: .75rem 1rem; align-items: flex-end; background: var(--creme); border: 3px solid var(--vinho); padding: 1rem; box-shadow: 5px 5px 0 var(--vinho); margin-bottom: 1rem; }
+.campo { display: flex; flex-direction: column; flex: 1 1 11rem; }
+.campo.grande { flex: 3 1 16rem; }
+.linha { display: flex; flex-wrap: wrap; gap: .75rem; }
+label { font-weight: 700; margin-bottom: .2rem; }
+input:not([type="checkbox"]), select {
+  font: inherit; color: var(--tinta); background: #fff; border: 2px solid var(--vinho); border-radius: 0; padding: .5rem .6rem; width: 100%;
+}
+input[type="checkbox"] { accent-color: var(--vinho); width: 1.1rem; height: 1.1rem; }
+.marcar { display: flex; align-items: center; gap: .5rem; margin: 0 0 .5rem; cursor: pointer; }
+button {
+  font: 700 1rem var(--texto); color: var(--vinho); background: var(--creme); border: 2px solid var(--vinho);
+  padding: .5rem 1rem; cursor: pointer; box-shadow: 3px 3px 0 var(--vinho); transition: transform .08s, box-shadow .08s;
+}
+button:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--vinho); }
+button:active:not(:disabled) { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--vinho); }
+button.primario { background: var(--vinho); color: var(--creme); }
+button.perigo { background: var(--rosa); color: var(--tinta); border-color: var(--tinta); box-shadow: 3px 3px 0 var(--tinta); }
+button:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+:focus-visible { outline: 3px solid var(--tinta); outline-offset: 2px; box-shadow: 0 0 0 6px var(--rosa); }
+.letreiro :focus-visible { outline-color: var(--creme); }
+.acoes { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .5rem; }
+fieldset { border: 2px solid var(--vinho); padding: .75rem; margin: 0; }
+legend { font-weight: 700; padding: 0 .4rem; }
+.chips-marcar { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .75rem; max-height: 9rem; overflow: auto; }
+.chip-marcar { display: inline-flex; align-items: center; gap: .35rem; margin: 0; padding: .15rem .6rem; border: 2px solid var(--vinho); background: #fff; cursor: pointer; font-weight: 400; }
+.chip-marcar:has(input:checked) { background: var(--vinho); color: var(--creme); }
+.chip-marcar:has(input:checked) input { accent-color: var(--rosa); }
+.erro-form { color: var(--vinho); font-weight: 700; margin: 0; min-height: 0; }
+.erro-form:not(:empty) { background: var(--bege); border-left: 6px solid var(--rosa); padding: .5rem .75rem; }
+.dica { margin: -.25rem 0 0; font-size: .9rem; font-style: italic; }
+.destaque-filme { margin: 0; padding: .5rem .75rem; background: var(--bege); border: 2px dashed var(--vinho); font-weight: 700; }
+
+/* ---------- fitas de vídeo (cartões de filme) ---------- */
+.grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: 1.5rem 1.25rem; }
+.fita { background: var(--creme); border: 3px solid var(--vinho); box-shadow: 6px 6px 0 var(--vinho); display: flex; flex-direction: column; position: relative; }
+.fita::after { /* janelinha de carretéis da fita VHS */
+  content: ""; position: absolute; right: 12px; top: 10px; width: 54px; height: 22px; border: 2px solid var(--creme); border-radius: 3px;
+  background: radial-gradient(circle at 25% 50%, var(--creme) 5px, transparent 5.5px), radial-gradient(circle at 75% 50%, var(--creme) 5px, transparent 5.5px);
+  opacity: .85;
+}
+.fita-topo { background: var(--vinho); color: var(--creme); padding: .7rem 4.8rem .7rem .8rem; min-height: 4.6rem; display: flex; align-items: center; border-bottom: 6px solid var(--rosa); }
+.fita-topo h3 { font: 400 1rem/1.2 var(--display); overflow-wrap: anywhere; }
+.fita-corpo { padding: .8rem; display: flex; flex-direction: column; gap: .6rem; flex: 1; }
+.meta { margin: 0; display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+.classif { border: 2px solid var(--vinho); padding: 0 .5rem; font-size: .85rem; background: var(--bege); }
+.classif.c16, .classif.c18 { background: var(--vinho); color: var(--creme); }
+.classif.c14 { background: var(--rosa); color: var(--tinta); }
+.generos { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .3rem; }
+.generos li { background: var(--bege); border: 1px solid var(--vinho); padding: 0 .5rem; font-size: .85rem; }
+.estoque { margin: 0; margin-top: auto; border-top: 2px dashed var(--vinho); padding-top: .5rem; }
+.estoque strong { font: 400 1.6rem/1 var(--display); color: var(--vinho); }
+.estoque.zero strong { color: var(--rosa); -webkit-text-stroke: 1px var(--tinta); }
+.fita.esgotada .fita-topo { background: var(--tinta); }
+.carimbo { margin: 0; align-self: flex-start; transform: rotate(-4deg); border: 3px solid var(--rosa); color: var(--tinta); background: var(--rosa); padding: .05rem .6rem; font: 400 .85rem var(--display); }
+.fita .acoes button { padding: .35rem .7rem; font-size: .9rem; }
+
+/* ---------- tabelas ---------- */
+.rolagem { overflow-x: auto; background: var(--creme); border: 3px solid var(--vinho); box-shadow: 5px 5px 0 var(--vinho); }
+table { width: 100%; border-collapse: collapse; min-width: 44rem; }
+th { background: var(--vinho); color: var(--creme); text-align: left; padding: .6rem .7rem; }
+td { padding: .6rem .7rem; border-bottom: 2px dotted var(--vinho); vertical-align: top; }
+tbody tr:nth-child(even) { background: var(--bege); }
+tr.linha-atrasada td { background: #f6d3d6; }
+td.acoes-celula { display: flex; flex-wrap: wrap; gap: .4rem; border-bottom: 0; }
+td.acoes-celula button, td button { padding: .3rem .7rem; font-size: .9rem; }
+.selo { display: inline-block; border: 2px solid var(--vinho); padding: 0 .5rem; font-weight: 700; background: var(--creme); }
+.selo.atrasada { background: var(--rosa); color: var(--tinta); border-color: var(--tinta); }
+.selo.devolvida { background: var(--bege); }
+.multa-valor { font-weight: 700; color: var(--vinho); }
+
+/* ---------- janelas (dialog) ---------- */
+dialog { padding: 0; border: 4px solid var(--vinho); background: var(--creme); color: var(--tinta); box-shadow: 8px 8px 0 var(--rosa); width: min(34rem, 94vw); max-height: 92vh; overflow: auto; }
+dialog::backdrop { background: rgba(43, 10, 18, .7); }
+dialog > h2 { background: var(--vinho); color: var(--creme); font-size: 1.15rem; padding: .7rem 1.25rem; border-bottom: 6px solid var(--rosa); }
+.dlg { padding: 1.25rem; display: flex; flex-direction: column; gap: .9rem; }
+.recibo { padding: 0 0 1.25rem; font-family: var(--texto); }
+.recibo h2 { text-align: center; }
+.recibo dl { margin: 1rem 1.25rem; display: grid; grid-template-columns: auto 1fr; gap: .25rem 1rem; border: 2px dashed var(--vinho); padding: 1rem; background: #fff; }
+.recibo dt { font-weight: 700; }
+.recibo dd { margin: 0; text-align: right; overflow-wrap: anywhere; }
+.recibo-nota { margin: 0 1.25rem; padding: .6rem .8rem; background: var(--bege); border-left: 8px solid var(--vinho); font-weight: 700; }
+.recibo-nota.alerta { border-left-color: var(--rosa); background: #f6d3d6; }
+.recibo .acoes { margin: 1rem 1.25rem 0; }
+
+@media (max-width: 40rem) {
+  .abas .sair { margin-left: 0; }
+  .ticket { min-width: 6.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .letreiro::after { animation: none; }
+  button { transition: none; }
+}

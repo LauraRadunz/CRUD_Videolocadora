@@ -1,0 +1,16 @@
+{
+  "name": "rebobine-video-locadora",
+  "version": "2.0.0",
+  "description": "Sistema de videolocadora: filmes, clientes, locações, devoluções e multa por atraso",
+  "main": "server.js",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "start": "node --no-warnings=ExperimentalWarning server.js",
+    "dev": "node --no-warnings=ExperimentalWarning --watch server.js",
+    "test": "node --no-warnings=ExperimentalWarning --test tests/*.test.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}

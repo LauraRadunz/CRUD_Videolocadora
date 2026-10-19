@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rebobine Vídeo Locadora</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="pular" href="#principal">Pular para o conteúdo</a>
+  <div class="toldo" aria-hidden="true"></div>
+
+  <header class="letreiro">
+    <div class="marca">
+      <h1>Rebobine</h1>
+      <p>Vídeo Locadora</p>
+    </div>
+    <div class="placar" aria-label="Resumo do acervo">
+      <div class="ticket"><strong id="n-disp">0</strong><span>exemplares disponíveis</span></div>
+      <div class="ticket"><strong id="n-abertas">0</strong><span>locações em aberto</span></div>
+      <div class="ticket ticket-alerta"><strong id="n-atrasadas">0</strong><span>em atraso</span></div>
+    </div>
+    <nav class="abas" aria-label="Seções do sistema">
+      <button type="button" data-aba="acervo" aria-current="page">Acervo</button>
+      <button type="button" data-aba="locacoes">Locações</button>
+      <button type="button" data-aba="clientes">Clientes</button>
+      <button type="button" id="btn-sair" class="sair">Sair</button>
+    </nav>
+  </header>
+
+  <div id="aviso" role="status" aria-live="polite"></div>
+
+  <main id="principal">
+    <!-- ACERVO -->
+    <section id="tela-acervo" aria-labelledby="h-acervo">
+      <div class="cabecalho-secao">
+        <h2 id="h-acervo">Acervo de filmes</h2>
+        <button type="button" id="btn-novo-filme" class="primario">+ Novo filme</button>
+      </div>
+      <form class="filtros" id="filtros-filmes" role="search" onsubmit="return false">
+        <div class="campo grande">
+          <label for="busca-filme">Buscar filme</label>
+          <input id="busca-filme" type="search" placeholder="Título, gênero ou ano" autocomplete="off">
+        </div>
+        <div class="campo">
+          <label for="filtro-genero">Gênero</label>
+          <select id="filtro-genero"><option value="">Todos</option></select>
+        </div>
+        <label class="marcar"><input type="checkbox" id="so-disponiveis"> Só disponíveis</label>
+      </form>
+      <p id="contagem-filmes" class="contagem"></p>
+      <div id="grade-filmes" class="grade"></div>
+      <p id="vazio-filmes" class="vazio" hidden>Nenhum filme encontrado. Tente outra busca.</p>
+    </section>
+
+    <!-- LOCAÇÕES -->
+    <section id="tela-locacoes" aria-labelledby="h-locacoes" hidden>
+      <div class="cabecalho-secao">
+        <h2 id="h-locacoes">Locações e devoluções</h2>
+      </div>
+      <p class="regra">Prazo de <strong>7 dias</strong>. A partir do 8º dia, multa de <strong id="valor-multa">R$ 2,00</strong> por dia de atraso.</p>
+      <form class="filtros" onsubmit="return false" role="search">
+        <div class="campo grande">
+          <label for="busca-locacao">Buscar locação</label>
+          <input id="busca-locacao" type="search" placeholder="Cliente, CPF ou filme" autocomplete="off">
+        </div>
+        <div class="campo">
+          <label for="filtro-status">Mostrar</label>
+          <select id="filtro-status">
+            <option value="abertas">Em aberto</option>
+            <option value="atrasadas">Atrasadas</option>
+            <option value="devolvidas">Devolvidas</option>
+            <option value="todas">Todas</option>
+          </select>
+        </div>
+      </form>
+      <div class="rolagem">
+        <table>
+          <caption class="so-leitor">Lista de locações</caption>
+          <thead><tr>
+            <th scope="col">Cliente</th><th scope="col">Filme</th><th scope="col">Retirada</th>
+            <th scope="col">Devolver até</th><th scope="col">Situação</th><th scope="col">Multa</th><th scope="col">Ação</th>
+          </tr></thead>
+          <tbody id="tabela-locacoes"></tbody>
+        </table>
+      </div>
+      <p id="vazio-locacoes" class="vazio" hidden>Nenhuma locação encontrada.</p>
+    </section>
+
+    <!-- CLIENTES -->
+    <section id="tela-clientes" aria-labelledby="h-clientes" hidden>
+      <div class="cabecalho-secao">
+        <h2 id="h-clientes">Clientes</h2>
+        <button type="button" id="btn-novo-cliente" class="primario">+ Novo cliente</button>
+      </div>
+      <form class="filtros" onsubmit="return false" role="search">
+        <div class="campo grande">
+          <label for="busca-cliente">Buscar cliente</label>
+          <input id="busca-cliente" type="search" placeholder="Nome ou CPF" autocomplete="off">
+        </div>
+      </form>
+      <div class="rolagem">
+        <table>
+          <caption class="so-leitor">Lista de clientes</caption>
+          <thead><tr>
+            <th scope="col">Nome</th><th scope="col">CPF</th><th scope="col">Telefone</th>
+            <th scope="col">E-mail</th><th scope="col">Filmes com ele</th><th scope="col">Ações</th>
+          </tr></thead>
+          <tbody id="tabela-clientes"></tbody>
+        </table>
+      </div>
+      <p id="vazio-clientes" class="vazio" hidden>Nenhum cliente encontrado.</p>
+    </section>
+  </main>
+
+  <footer class="rodape">Rebobine Vídeo Locadora &mdash; seja gentil, rebobine.</footer>
+
+  <!-- LOGIN -->
+  <dialog id="dlg-login" aria-labelledby="t-login">
+    <h2 id="t-login">Entrar no balcão</h2>
+    <form id="form-login" class="dlg">
+      <div class="campo"><label for="login-usuario">Usuário</label><input id="login-usuario" autocomplete="username" required></div>
+      <div class="campo"><label for="login-senha">Senha</label><input id="login-senha" type="password" autocomplete="current-password" required></div>
+      <p class="erro-form" role="alert"></p>
+      <div class="acoes"><button type="submit" class="primario">Entrar</button></div>
+    </form>
+  </dialog>
+
+  <!-- FILME -->
+  <dialog id="dlg-filme" aria-labelledby="t-filme">
+    <h2 id="t-filme">Novo filme</h2>
+    <form id="form-filme" class="dlg">
+      <input type="hidden" id="filme-id">
+      <div class="campo"><label for="filme-titulo">Título</label><input id="filme-titulo" required minlength="2" maxlength="100"></div>
+      <div class="linha">
+        <div class="campo"><label for="filme-ano">Ano</label><input id="filme-ano" type="number" min="1888" required></div>
+        <div class="campo"><label for="filme-classif">Classificação</label>
+          <select id="filme-classif">
+            <option value="L">Livre</option><option value="10">10 anos</option><option value="12">12 anos</option>
+            <option value="14">14 anos</option><option value="16">16 anos</option><option value="18">18 anos</option>
+          </select></div>
+        <div class="campo"><label for="filme-copias">Cópias (total)</label><input id="filme-copias" type="number" min="0" step="1" value="1" required></div>
+      </div>
+      <fieldset>
+        <legend>Gêneros (marque quantos quiser)</legend>
+        <div id="lista-generos" class="chips-marcar"></div>
+        <div class="campo"><label for="filme-novos-generos">Outros gêneros (separe por vírgula)</label>
+          <input id="filme-novos-generos" placeholder="Ex.: Faroeste, Documentário"></div>
+      </fieldset>
+      <p class="erro-form" role="alert"></p>
+      <div class="acoes"><button type="submit" class="primario">Salvar filme</button><button type="button" data-fechar>Cancelar</button></div>
+    </form>
+  </dialog>
+
+  <!-- CLIENTE -->
+  <dialog id="dlg-cliente" aria-labelledby="t-cliente">
+    <h2 id="t-cliente">Novo cliente</h2>
+    <form id="form-cliente" class="dlg">
+      <input type="hidden" id="cliente-id">
+      <div class="campo"><label for="cliente-nome">Nome completo</label><input id="cliente-nome" required minlength="2" maxlength="100"></div>
+      <div class="linha">
+        <div class="campo"><label for="cliente-cpf">CPF</label><input id="cliente-cpf" data-mascara="cpf" inputmode="numeric" required></div>
+        <div class="campo"><label for="cliente-tel">Telefone</label><input id="cliente-tel" data-mascara="tel" inputmode="tel" required></div>
+      </div>
+      <div class="campo"><label for="cliente-email">E-mail (opcional)</label><input id="cliente-email" type="email"></div>
+      <p class="erro-form" role="alert"></p>
+      <div class="acoes"><button type="submit" class="primario">Salvar cliente</button><button type="button" data-fechar>Cancelar</button></div>
+    </form>
+  </dialog>
+
+  <!-- ALUGAR -->
+  <dialog id="dlg-alugar" aria-labelledby="t-alugar">
+    <h2 id="t-alugar">Alugar filme</h2>
+    <form id="form-alugar" class="dlg">
+      <input type="hidden" id="alugar-filme-id">
+      <p class="destaque-filme" id="alugar-filme"></p>
+      <div class="campo"><label for="alugar-cpf">CPF do cliente</label><input id="alugar-cpf" data-mascara="cpf" inputmode="numeric" required></div>
+      <p class="dica" id="alugar-dica">Digite o CPF: se o cliente já existir, os dados são preenchidos sozinhos.</p>
+      <div class="campo"><label for="alugar-nome">Nome completo</label><input id="alugar-nome" required minlength="2" maxlength="100"></div>
+      <div class="linha">
+        <div class="campo"><label for="alugar-tel">Telefone</label><input id="alugar-tel" data-mascara="tel" inputmode="tel" required></div>
+        <div class="campo"><label for="alugar-email">E-mail (opcional)</label><input id="alugar-email" type="email"></div>
+      </div>
+      <p class="erro-form" role="alert"></p>
+      <div class="acoes"><button type="submit" class="primario">Confirmar locação</button><button type="button" data-fechar>Cancelar</button></div>
+    </form>
+  </dialog>
+
+  <!-- RECIBO -->
+  <dialog id="dlg-recibo" aria-labelledby="t-recibo">
+    <div class="recibo">
+      <h2 id="t-recibo">Recibo</h2>
+      <dl id="recibo-linhas"></dl>
+      <p id="recibo-nota" class="recibo-nota"></p>
+      <div class="acoes"><button type="button" class="primario" data-fechar>Fechar</button></div>
+    </div>
+  </dialog>
+
+  <script src="js/util.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/filmes.js"></script>
+  <script src="js/clientes.js"></script>
+  <script src="js/locacoes.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
